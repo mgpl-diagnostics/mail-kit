@@ -1,0 +1,47 @@
+{
+  "name": "@mgpl-diagnostics/mail-kit",
+  "version": "0.1.0",
+  "description": "MGPL Diagnostics mail: templates written in our own mail design language (.mail), compiled to email-safe HTML and plain text, sent through the worker's queue when available or directly over SMTP. Zero runtime dependencies.",
+  "type": "module",
+  "license": "SEE LICENSE IN LICENSE",
+  "repository": "github:mgpl-diagnostics/mail-kit",
+  "sideEffects": false,
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "docs",
+    "README.md",
+    "AGENTS.md",
+    "llms.txt",
+    "LICENSE",
+    "llms-full.txt"
+  ],
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
+  "scripts": {
+    "build": "tsup",
+    "typecheck": "tsc --noEmit",
+    "test": "tsx scripts/test.ts",
+    "examples": "tsx scripts/examples.ts",
+    "prepare": "tsup",
+    "llms": "node scripts/llms-full.mjs @mgpl-diagnostics/mail-kit README.md AGENTS.md llms.txt docs package.json src scripts"
+  },
+  "devDependencies": {
+    "@types/node": "^22.20.5",
+    "tsup": "^8.5.0",
+    "tsx": "^4.23.15",
+    "typescript": "^5.9.3"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
