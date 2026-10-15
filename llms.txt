@@ -1,0 +1,25 @@
+# @mgpl-diagnostics/mail-kit
+
+> Mail for the MGPL Diagnostics backend (Node.js ≥ 20, zero runtime dependencies). Mails are written in the MGPL mail design language (`.mail`: front matter, Markdown-like text, `::button`/`::callout`/`::card`/`::rows`/`::table`/`::code`/`::divider`/`::spacer`/`::image` blocks, `::if`/`::each`, `{{ var | filter }}`), compiled to email-safe HTML plus plain text in one theme, and sent through the worker's queue when available or directly over SMTP.
+
+Key facts for agents:
+- `createMailer({ transport, from, queue?, brand?, theme?, templates? })`; `mailer.send(id, data, { to })` → `{ via: "queue", jobId }` or `{ via: "direct", messageId, accepted }`; the worker runs `mailProcessor(mailer)`.
+- `queueAdapter(bullmqQueue, { available: () => redis.status === "ready" })`; failures fall back to direct sending (or throw with `whenQueueFails: "throw"`).
+- `smtpTransport("smtps://user:pass@host:465")`, `memoryTransport()`, `fileTransport(dir)`.
+- `defineMail({ id, description, source, sample })`; `parseMail`, `checkMail`, `renderMail`, `mailVariables`.
+- Filters: money (integer paise), number, date, time, datetime (IST), upper, lower, default.
+- Errors: `MailError.code` = MAIL_SYNTAX, MAIL_MISSING_VARIABLE, MAIL_BAD_VALUE, MAIL_UNSAFE_URL, MAIL_UNKNOWN_TEMPLATE, MAIL_BAD_ADDRESS, MAIL_TRANSPORT, MAIL_QUEUE.
+
+## Docs
+
+- [README](README.md): usage, transports, custom mails
+- [docs/language.md](docs/language.md): the mail design language
+- [AGENTS.md](AGENTS.md): map and rules
+
+## Source
+
+- [src/parse.ts](src/parse.ts): parser
+- [src/render.ts](src/render.ts): HTML + text renderer
+- [src/mailer.ts](src/mailer.ts): queue / direct mailer
+- [src/smtp.ts](src/smtp.ts): SMTP client
+- [src/templates.ts](src/templates.ts): built-in mails
